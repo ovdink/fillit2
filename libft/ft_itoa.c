@@ -3,53 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgendry <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lschambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/30 20:21:26 by sgendry           #+#    #+#             */
-/*   Updated: 2018/12/03 20:35:13 by sgendry          ###   ########.fr       */
+/*   Created: 2018/11/25 14:34:45 by lschambe          #+#    #+#             */
+/*   Updated: 2018/11/29 15:45:26 by lschambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static int		ft_my_count(long n)
+static int	ft_len(int n)
 {
-	int			count;
+	int i;
 
-	count = 0;
-	if (n <= 0)
-		count++;
-	while (n != 0)
+	i = 0;
+	while (n > 9 || n < -9)
 	{
+		i++;
 		n /= 10;
-		count++;
 	}
-	return (count);
+	if (n < 0)
+		i++;
+	return (i);
 }
 
-char			*ft_itoa(int n)
+char		*ft_itoa(int n)
 {
-	long int	num;
-	int			size;
-	char		*mem;
+	int		i;
+	char	*s;
+	int		notn;
+	int		check;
 
-	size = ft_my_count(n);
+	check = 1;
+	i = 0;
+	notn = n;
+	i = ft_len(n);
 	if (n < 0)
-		num = -(long)n;
-	else
-		num = n;
-	mem = ft_strnew(size);
-	if (mem == 0)
+		check = -1;
+	s = (char*)malloc(sizeof(char) * i + 2);
+	if (!s)
 		return (NULL);
-	if (num == 0)
-		mem[0] = '0';
-	while (num != 0)
-	{
-		mem[size - 1] = num % 10 + '0';
-		num /= 10;
-		size--;
-	}
-	if (size == 1 && n)
-		mem[0] = '-';
-	return (mem);
+	s[i + 1] = '\0';
+	s[i--] = (notn % 10) * check + '0';
+	while (notn /= 10)
+		s[i--] = (check * notn % 10 + '0');
+	if (n < 0)
+		s[0] = '-';
+	return (s);
 }

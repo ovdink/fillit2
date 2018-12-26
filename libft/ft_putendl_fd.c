@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putendl.c                                       :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgendry <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lschambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/28 15:19:54 by sgendry           #+#    #+#             */
-/*   Updated: 2018/11/28 18:54:53 by sgendry          ###   ########.fr       */
+/*   Created: 2018/11/26 16:34:31 by lschambe          #+#    #+#             */
+/*   Updated: 2018/11/29 17:07:43 by lschambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,15 @@
 
 void	ft_putendl_fd(char const *s, int fd)
 {
+	int i;
+
 	if (!s)
 		return ;
-	while (*s)
+	i = 0;
+	while (s[i] != '\0')
 	{
-		ft_putchar_fd(*s, fd);
-		s++;
+		write(fd, &s[i], 1);
+		i++;
 	}
-	ft_putchar_fd('\n', fd);
+	write(fd, "\n", 1);
 }

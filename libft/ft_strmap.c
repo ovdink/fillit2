@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgendry <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lschambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/28 21:52:33 by sgendry           #+#    #+#             */
-/*   Updated: 2018/11/29 16:06:51 by sgendry          ###   ########.fr       */
+/*   Created: 2018/11/23 12:00:57 by lschambe          #+#    #+#             */
+/*   Updated: 2018/11/30 11:57:46 by lschambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,26 @@
 
 char	*ft_strmap(char const *s, char (*f)(char))
 {
+	char	*dst;
+	int		i;
 	int		len;
-	char	*mem;
-	char	*mem_begin;
 
-	if (!s || !f)
-		return (NULL);
-	len = ft_strlen(s);
-	mem = ft_strnew(len);
-	if (!mem)
-		return (NULL);
-	mem_begin = mem;
-	if (mem == 0)
-		return (NULL);
-	while (*s)
+	if (s && f)
 	{
-		*mem = f(*s);
-		mem++;
-		s++;
+		len = 0;
+		while (s[len] != '\0')
+			len++;
+		dst = malloc(sizeof(char) * len + 1);
+		if (!dst)
+			return (NULL);
+		i = 0;
+		while (i < len)
+		{
+			dst[i] = f(s[i]);
+			i++;
+		}
+		dst[i] = '\0';
+		return (dst);
 	}
-	return (mem_begin);
+	return (NULL);
 }

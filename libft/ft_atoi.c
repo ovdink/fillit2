@@ -3,37 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgendry <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lschambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/22 15:38:05 by sgendry           #+#    #+#             */
-/*   Updated: 2018/12/03 21:05:36 by sgendry          ###   ########.fr       */
+/*   Created: 2018/11/22 15:06:34 by lschambe          #+#    #+#             */
+/*   Updated: 2018/12/02 15:45:42 by lschambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
+
 int		ft_atoi(const char *str)
 {
-	long long		number;
-	int				i;
-	int				negative;
+	long int	ato;
+	long int	plmi;
+	int			check;
 
-	number = 0;
-	i = 0;
-	negative = 1;
-	while (str[i] == 32 || (str[i] >= 9 && str[i] <= 13))
-		i++;
-	if (str[i] == '-')
+	ato = 0;
+	plmi = 1;
+	while (*str == ' ' || *str == '\t' || *str == '\n'
+	|| *str == '\r' || *str == '\v' || *str == '\f')
+		str++;
+	if (*str == '-')
+		plmi = -1;
+	if (*str == '-' || *str == '+')
+		str++;
+	check = ato;
+	while (*str >= '0' && *str <= '9')
 	{
-		negative = -1;
-		i++;
+		ato = ato * 10 + plmi * (*str - '0');
+		if (ato < check && plmi == 1)
+			return (-1);
+		if (ato > check && plmi == -1)
+			return (0);
+		check = ato;
+		str++;
 	}
-	else if (str[i] == '+')
-		i++;
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		number = number * 10 + str[i] - '0';
-		i++;
-		if (number < 0)
-			return (negative == -1 ? 0 : -1);
-	}
-	return (negative * number);
+	return (ato);
 }

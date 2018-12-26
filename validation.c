@@ -1,29 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   valid.c                                            :+:      :+:    :+:   */
+/*   validation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lschambe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: sgendry <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/20 13:43:27 by lschambe          #+#    #+#             */
-/*   Updated: 2018/12/25 16:36:59 by sgendry          ###   ########.fr       */
+/*   Created: 2018/12/20 13:43:27 by sgendry           #+#    #+#             */
+/*   Updated: 2018/12/26 17:12:15 by sgendry          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fillit.h"
 
-int		check_sharp(char **tetra, char c)
+int		check_map(char *str, int *flag)
+{
+	int w;
+	int sharp;
+
+	if (!str)
+		return (0);
+	if (ft_strlen(str) < 20)
+		return (0);
+	w = 0;
+	sharp = 0;
+	while (str[w])
+	{
+		if (((w + 1) % 5 == 0) && str[w] != '\n')
+			return (0);
+		if (((w + 1) % 5 != 0) && (!(str[w] != '.' || str[w] != '#')))
+			return (0);
+		if (str[w] == '#')
+			sharp++;
+		w++;
+	}
+	if (!(str[20] == '\n' || str[20] == '\0') || sharp != 4)
+		return (0);
+	if (str[20] == '\0')
+		*flag = 0;
+	return (1);
+}
+
+int		check_sharp(unsigned char **tetra, char c)
 {
 	int w;
 	int h;
 	int contact;
 
-	h = 0;
+	h = -1;
 	contact = 0;
-	while (h < 4)
+	while (++h < 4)
 	{
-		w = 0;
-		while (w < 4)
+		w = -1;
+		while (++w < 4)
 		{
 			if (tetra[h][w] == c)
 			{
@@ -36,39 +64,7 @@ int		check_sharp(char **tetra, char c)
 				if (h < 3 && tetra[h + 1][w] == c)
 					contact++;
 			}
-			w++;
 		}
-		h++;
 	}
-	if (contact == 6 || contact == 8)
-		return(1);
-	return (0);
-}
-
-int			check_map(char *s, int *flag)
-{
-	int i;
-	int j;
-
-	if (!s)
-		return (0);
-	if (ft_strlen(s) < 20)
-		return (0);
-	i = 0;
-	j = 0;
-	while (s[i])
-	{
-		if (((i + 1) % 5 == 0) && s[i] != '\n')
-			return (0);
-		if (((i + 1) % 5 != 0) && (!(s[i] != '.' || s[i] != '#')))
-			return (0);
-		if (s[i] == '#')
-			j++;
-		i++;
-	}
-	if (!(s[20] == '\n' || s[20] == '\0') || j != 4)
-		return (0);
-	if (s[20] == '\0')
-		*flag = 0;
-	return (1);
+	return ((contact == 6 || contact == 8) ? 1 : 0);
 }

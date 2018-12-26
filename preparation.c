@@ -6,21 +6,23 @@
 /*   By: sgendry <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/25 16:21:40 by sgendry           #+#    #+#             */
-/*   Updated: 2018/12/25 16:22:55 by sgendry          ###   ########.fr       */
+/*   Updated: 2018/12/26 17:28:13 by sgendry          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "fillit.h"
+
 void	change_figure(t_tetra **tetra)
 {
-	char **tab;
+	unsigned char **tab;
 	int i;
 	int j;
 
 	i = 0;
-	tab = (char**)malloc(sizeof(char*) * ((*tetra)->p[1] - (*tetra)->p[0] + 1));
+	tab = (unsigned char**)malloc(sizeof(unsigned char*) * ((*tetra)->p[1] - (*tetra)->p[0] + 1));
 	while (i < ((*tetra)->p[1] - (*tetra)->p[0] + 1))
 	{
-		tab[i] = (char*)malloc(sizeof(char) * ((*tetra)->p[3] - (*tetra)->p[2] + 1));
+		tab[i] = (unsigned char*)malloc(sizeof(unsigned char) * ((*tetra)->p[3] - (*tetra)->p[2] + 1));
 		j = 0;
 		while (j < ((*tetra)->p[3] - (*tetra)->p[2] + 1))
 		{
@@ -62,49 +64,18 @@ void	points(t_tetra **tetra)
 	change_figure(tetra);
 }
 
-void		print_figures(t_tetra *lst)
-{
-	int i;
-	int j;
-
-	while (lst)
-	{
-		i = 0;
-		while (i < (lst->p[1] - lst->p[0] + 1))
-		{
-			j = 0;
-			while (j < (lst->p[3] - lst->p[2] + 1))
-			{
-				printf("%c", lst->figure[i][j]);
-				j++;
-			}
-			printf("\n");
-			i++;
-		}
-		printf("\n");
-		i = 0;
-		/*while (i < 4)
-		{
-			printf("%d ", lst->p[i]);
-			i++;
-		}
-		printf("\n");*/
-		lst = lst->next;
-	}
-}
-
 int		get_figure(char *s, t_tetra **tetra)
 {
 	int		i;
 	int		j;
 	int		k;
 
-	i = 0;
+	i = -1;
 	k = 0;
-	(*tetra)->figure = (char **)malloc(sizeof(char *) * 4);
-	while (i < 4)
+	(*tetra)->figure = (unsigned char **)malloc(sizeof(unsigned char *) * 4);
+	while (++i < 4)
 	{
-		(*tetra)->figure[i] = (char*)malloc(sizeof(char) * 4);
+		(*tetra)->figure[i] = (unsigned char*)malloc(sizeof(unsigned char) * 4);
 		j = 0;
 		while (j < 4)
 		{
@@ -116,7 +87,6 @@ int		get_figure(char *s, t_tetra **tetra)
 			k++;
 		}
 		k++;
-		i++;
 	}
 	if (!(check_sharp((*tetra)->figure, (*tetra)->symb)))
 		return (0);
@@ -138,11 +108,6 @@ int			add_node(t_tetra **lst, char *s)
 	if (!(*lst))
 	{
 		*lst = new_tetra;
-		return (1);
-	}
-	if ((*lst)->next == NULL)
-	{
-		(*lst)->next = new_tetra;
 		return (1);
 	}
 	to_end = *lst;
