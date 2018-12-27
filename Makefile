@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lschambe <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: sgendry <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/12/19 15:13:27 by lschambe          #+#    #+#              #
-#    Updated: 2018/12/26 17:27:13 by sgendry          ###   ########.fr        #
+#    Created: 2018/12/20 18:09:46 by sgendry           #+#    #+#              #
+#    Updated: 2018/12/27 14:27:32 by sgendry          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,18 +16,24 @@ FILES = fillit.c \
 		validation.c \
 		preparation.c \
 		solution.c \
+		solution_second.c \
 		libft/ft_strlen.c \
 		libft/ft_putstr.c \
 		libft/ft_putchar.c
 
+OBJECTS = $(FILES:.c=.o)
+
 $(NAME) :
-	gcc $(FLAG) -o $(NAME) $(FILES)
+	gcc $(FLAG) -c $(FILES) -o $(OBJECTS)
+
+#$(NAME) :
+#	gcc $(FLAG) -o $(NAME) $(FILES)
 
 all : $(NAME)
 
 clean :
+	rm -rf $(NAME)
 
 fclean : clean
-	rm -rf $(NAME)
 
 re : fclean all

@@ -6,15 +6,14 @@
 /*   By: sgendry <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/20 13:14:19 by sgendry           #+#    #+#             */
-/*   Updated: 2018/12/26 17:14:48 by sgendry          ###   ########.fr       */
+/*   Updated: 2018/12/27 14:00:13 by sgendry          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "fillit.h"
 
-void	put_figure(int size, unsigned char tab[size][size], t_tetra *tetra,
-	   	int i, int j)
+void				put_figure(int size, unsigned char tab[size][size],
+					t_tetra *tetra, int coor[2])
 {
 	int	h;
 	int w;
@@ -22,11 +21,11 @@ void	put_figure(int size, unsigned char tab[size][size], t_tetra *tetra,
 	int b;
 
 	h = 0;
-	a = i;
+	a = coor[0];
 	while (h <= (tetra->p[1] - tetra->p[0]))
 	{
 		w = 0;
-		b = j;
+		b = coor[1];
 		while (w <= (tetra->p[3] - tetra->p[2]))
 		{
 			if (tetra->figure[h][w] == tetra->symb)
@@ -39,10 +38,10 @@ void	put_figure(int size, unsigned char tab[size][size], t_tetra *tetra,
 	}
 }
 
-int		check_figure(int size, unsigned char tab[size][size])
+int					check_figure(int size, unsigned char tab[size][size])
 {
-	int i;
-	int j;
+	int				i;
+	int				j;
 
 	i = 0;
 	while (i < size)
@@ -59,37 +58,32 @@ int		check_figure(int size, unsigned char tab[size][size])
 	return (1);
 }
 
-void	remove_figure(int size, unsigned char tab[size][size], t_tetra *tetra, int i, int j)
+void				remove_figure(int size, unsigned char tab[size][size],
+					t_tetra *tetra)
 {
-	int h;
-	int w;
-	int a;
-	int b;
+	int				h;
+	int				w;
 
 	h = 0;
-	a = i;
-	while (h <= (tetra->p[1] - tetra->p[0]))
+	while (h < size)
 	{
 		w = 0;
-		b = j;
-		while (w <= (tetra->p[3] - tetra->p[2]))
+		while (w < size)
 		{
-			if (tab[a][b] > 'Z')
-				tab[a][b] = tab[a][b] - tetra->symb;
-			if (tab[a][b] == tetra->symb)
-				tab[a][b] = 0;
+			if (tab[h][w] > 'Z')
+				tab[h][w] = tab[h][w] - tetra->symb;
+			if (tab[h][w] == tetra->symb)
+				tab[h][w] = 0;
 			w++;
-			b++;
 		}
 		h++;
-		a++;
 	}
 }
 
-void	print_map(int size, unsigned char tab[size][size])
+void				print_map(int size, unsigned char tab[size][size])
 {
-	int i;
-	int j;
+	int				i;
+	int				j;
 
 	i = 0;
 	while (i < size)
@@ -109,10 +103,11 @@ void	print_map(int size, unsigned char tab[size][size])
 	ft_putchar('\n');
 }
 
-void	cpy_arr(int size, unsigned char tab[size][size], unsigned char cpy[size][size])
+void				cpy_arr(int size, unsigned char tab[size][size],
+					unsigned char cpy[size][size])
 {
-	int i;
-	int j;
+	int				i;
+	int				j;
 
 	i = 0;
 	while (i < size)
@@ -125,90 +120,4 @@ void	cpy_arr(int size, unsigned char tab[size][size], unsigned char cpy[size][si
 		}
 		i++;
 	}
-}
-
-void zero_map(int size, unsigned char tab[size][size])
-{
-	int i;
-	int j;
-
-	i = 0;
-	while (i < size)
-	{
-		j = 0;
-		while (j < size)
-		{
-			tab[i][j] = 0;
-			j++;
-		}
-		i++;
-	}
-}
-
-int		rec(int size, unsigned char tab[size][size], t_tetra *tetra, int *flag)
-{
-	int i;
-	int j;
-	unsigned char cpy[size][size];
-
-	i = 0;
-	while (i < (size - (tetra->p[1] - tetra->p[0])))
-	{
-		j = 0;
-		while (j < (size - (tetra->p[3] - tetra->p[2])))
-		{
-			if (*flag == 1)
-				return (1);
-			if (i == 0 && j == 0 && tetra->symb == 'A')
-				zero_map(size, tab);
-			put_figure(size, tab, tetra, i, j);
-			if (check_figure(size, tab) && !(tetra->next))
-			{
-				print_map(size,tab);
-				*flag = 1;
-				return (1);
-			}
-			if (!check_figure(size, tab))
-				remove_figure(size, tab, tetra, i, j);
-			else if (check_figure(size, tab) && tetra->next)
-			{
-				cpy_arr(size, tab, cpy);
-				if (!(rec(size, cpy, tetra->next, flag)))
-				{
-					remove_figure(size,tab, tetra, i, j);
-				}
-			}
-			j++;
-		}
-		i++;
-	}
-	if (tetra->symb == 'A')
-		rec(size + 1, tab, tetra, flag);
-	return (0);
-}
-
-int solut(t_tetra *tetra)
-{
-	int size = 2;
-	unsigned char s[size][size];
-	int i;
-	int j;
-	int flag;
-	int *f;
-
-	i = 0;
-	while (i < size)
-	{
-		j = 0;
-		while (j < size)
-		{
-			s[i][j] = 0;
-			j++;
-		}
-		i++;
-	}
-	flag = 0;
-	f = &flag;
-	i = rec(size, s, tetra, f);
-	return (1);
 }
